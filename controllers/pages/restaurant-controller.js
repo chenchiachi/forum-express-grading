@@ -2,7 +2,7 @@ const { Restaurant, Category, Comment, User } = require('../../models')
 const restaurantServices = require('../../services/restaurant-services')
 const restaurantController = {
   getRestaurants: (req, res, next) => {
-    restaurantServices.getReataurants(req, (err, data) => err ? next(err) : res.render('restaurants', data))
+    restaurantServices.getRestaurants(req, (err, data) => err ? next(err) : res.render('restaurants', data))
   },
   getRestaurant: (req, res, next) => {
     return Restaurant.findByPk(req.params.id, {
