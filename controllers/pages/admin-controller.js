@@ -1,5 +1,5 @@
 const adminServices = require('../../services/admin-services')
-const { Restaurant, User, Category, Comment } = require('../../models')
+const { Restaurant, User, Category } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
 const adminController = {
   getRestaurants: (req, res, next) => {
@@ -82,20 +82,7 @@ const adminController = {
       .catch(err => next(err))
   },
   deleteRestaurant: (req, res, next) => {
-    return Restaurant.findByPk(req.params.id, {
-      include: [
-        { model: Comment }
-      ]
-    })
-      .then(restaurant => {
-        if (!restaurant) throw new Error("Restaurant didn't exist!")
-        return restaurant.destroy()
-      })
-      .then(() => {
-        req.flash('success_messages', 'Delete Successful.')
-        res.redirect('/admin/restaurants')
-      })
-      .catch(err => next(err))
+    adminServices.deleteRestaurants(req, (err, data) => err ? next(err) : res.redirect('/admin/restaurants', data))
   },
   getUsers: (req, res, next) => {
     return User.findAll({
