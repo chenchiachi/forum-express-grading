@@ -36,23 +36,43 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
+    console.log('123123123123', req.user)
     return User.findByPk(req.params.id, {
-      include: { model: Comment, include: Restaurant }
+      include: [
+        { model: Comment, include: Restaurant },
+        { model: Restaurant, as: 'FavoritedRestaurants' },
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
+      ]
     })
-      .then(user => {
-        if (!user) throw new Error("User didn't exist!")
-        user = user.toJSON()
-        res.render('users/profile', { user })
+      .then(visitUser => {
+        if (!visitUser) throw new Error("User didn't exist!")
+        visitUser = visitUser.toJSON()
+        visitUser.isFollowed = req.user.Followings.some(f => f.id === visitUser.id)
+        const tempObject = {}
+        visitUser.Comments.forEach(comment => {
+          tempObject[comment.restaurantId] = comment
+        })
+        visitUser.Comments = Object.keys(tempObject).map(key => tempObject[key])
+        console.log('xxxx', visitUser)
+        res.render('users/profile', {
+          visitUser
+        })
       })
       .catch(err => next(err))
   },
   editUser: (req, res, next) => {
-    return User.findByPk(req.params.id)
-      .then(user => {
-        if (!user) throw new Error("User didn't exits!")
-        return res.render('users/edit', { user: user.toJSON() })
-      })
-      .catch(err => next(err))
+    if (req.user.id.toString() === req.params.id.toString()) {
+      return User.findByPk(req.params.id)
+        .then(user => {
+          if (!user) throw new Error("User didn't exits!")
+
+          return res.render('users/edit', { user: user.toJSON() })
+        })
+        .catch(err => next(err))
+    } else {
+      return res.redirect(`/users/${req.user.id}`)
+    }
   },
   putUser: (req, res, next) => {
     const { name } = req.body
@@ -169,6 +189,8 @@ const userController = {
   },
   addFollowing: (req, res, next) => {
     const { userId } = req.params
+    if (userId.toString() === req.user.id.toString()) throw new Error("You can't follow yourself!")
+
     Promise.all([
       User.findByPk(userId),
       Followship.findOne({

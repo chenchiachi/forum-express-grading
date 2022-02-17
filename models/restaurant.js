@@ -9,9 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate (models) {
+    static associate(models) {
       Restaurant.belongsTo(models.Category, { foreignKey: 'categoryId' })
-      Restaurant.hasMany(models.Comment, { foreignKey: 'restaurantId' })
+      Restaurant.hasMany(models.Comment, {
+        foreignKey: 'restaurantId',
+        onDelete: 'cascade',
+        hooks: true
+      })
       Restaurant.belongsToMany(models.User, {
         through: models.Favorite, // 透過 Favorite 表來建立關聯
         foreignKey: 'restaurantId', // 對 Favorite 表設定 FK
