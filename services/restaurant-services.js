@@ -65,14 +65,16 @@ const restaurantServices = {
   },
   getDashboard: (req, cb) => {
     return Restaurant.findByPk(req.params.id, {
-      include: Category,
-      nest: true,
-      raw: true
+      include: [
+        Category,
+        { model: Comment },
+        { model: User, as: 'FavoritedUsers' }
+      ]
     })
       .then(restaurant => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
         return cb(null, {
-          restaurant
+          restaurant: restaurant.toJSON()
         })
       })
       .catch(err => cb(err))

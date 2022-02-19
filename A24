@@ -1,0 +1,81 @@
+
+和 Users 有關的路由：
+POST /api/signin 登入(前/後台)
+POST /api/signup 註冊(前台)
+PUT /api/users/:id  編輯個人資料(前台)
+GET /api/users/:id 顯示個人資料（前台)
+GET /api/users/top 顯示使用者追蹤人數排名(前台)
+GET /api/admin/users 顯示所有的使用者資料(後台)
+PATCH /api/admin/users/:id 變更使用者權限(後台)
+
+和 Restaurants 有關的路由：
+GET /api/restaurants 顯示全部餐廳(前台)
+GET /api/restaurant 顯示個別餐廳(前台)
+GET /api/restaurants/top 瀏覽最新上架的10筆餐廳(前台)
+GET /api/restaurants/feeds 瀏覽最新的10筆動態(前台)
+GET /api/admin/restaurants 顯示全部餐廳(後台)
+GET /api/admin/restaurants/:id 顯示一家餐廳(後台)
+POST /api/admin/restaurants 新增一家餐廳(後台)
+DELETE /api/admin/restaurants/:id 刪除一家餐廳(後台)
+PUT /api/admin/restaurants/:id 編輯一家餐廳(後台)
+
+和 Categories 有關的路由：
+GET /api/admin/categories/:id 顯示所有餐廳分類(後台)
+POST /api/admin/categories 新增餐廳分類(後台)
+PUT /api/admin/categories/:id 編輯餐廳分類(後台)
+DELETE /api/admin/categories/:id 刪除餐廳分類(後台)
+
+和 Comments 有關的路由：
+POST /api/comments 對餐廳留下評論(前台)
+DELETE /api/comments/:id admind可刪除評論(後台)
+
+和 Favorites 有關的路由：
+POST /api/favorite/:restaurantId 收藏餐廳(前台)
+DELETE /api/favorite/:restaurantId 取消收藏餐廳(前台)
+
+和 Following 有關的路由：
+POST /api/following/:userId 追蹤其他使用者(前台)
+DELETE /api/following/:userId 取消追蹤(前台)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+和 User 有關的路由：
+POST /api/signin 登入
+POST /api/signup 註冊
+
+GET /api/users/:id 查看特定使用者個人頁面（前台）
+
+
+
+
+
+
+和 Restaurant 有關的路由：
+GET /api/restaurants 顯示全部餐廳 (前台)
+...
