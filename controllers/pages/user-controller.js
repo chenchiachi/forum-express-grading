@@ -36,7 +36,6 @@ const userController = {
     res.redirect('/signin')
   },
   getUser: (req, res, next) => {
-    console.log('123123123123', req.user)
     return User.findByPk(req.params.id, {
       include: [
         { model: Comment, include: Restaurant },
@@ -49,12 +48,12 @@ const userController = {
         if (!visitUser) throw new Error("User didn't exist!")
         visitUser = visitUser.toJSON()
         visitUser.isFollowed = req.user.Followings.some(f => f.id === visitUser.id)
-        const tempObject = {}
-        visitUser.Comments.forEach(comment => {
-          tempObject[comment.restaurantId] = comment
-        })
-        visitUser.Comments = Object.keys(tempObject).map(key => tempObject[key])
-        console.log('xxxx', visitUser)
+        visitUser.Comments = visitUser.Comments.reduce((accumulator, current) => {
+          if (!accumulator.some(r => r.id === current.restaurantId)) {
+            accumulator.push(current.Restaurant)
+          }
+          return accumulator
+        }, [])
         res.render('users/profile', {
           visitUser
         })
